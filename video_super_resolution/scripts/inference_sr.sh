@@ -40,17 +40,17 @@ for i in "${!mp4_files[@]}"; do
     echo "Processing video file: $mp4_file with prompt: $line"
         
     # Run Python script with parameters
-    python \
+    "F:/Coding Projects/STAR_Orig/STAR/venv/Scripts/python.exe" \
         ./video_super_resolution/scripts/inference_sr.py \
         --solver_mode 'fast' \
         --steps 15 \
         --input_path "${mp4_file}" \
-        --model_path ./pretrained_weight/model.pt \
+        --model_path ./pretrained_models/cogvideox/transformer/CogVideoX-5B-based/1/mp_rank_00_model_states.pt \
         --prompt "${line}" \
         --upscale 4 \
         --max_chunk_len ${frame_length} \
         --file_name "${file_name}.mp4" \
-        --save_dir ./results
+        --save_dir ./results/cogvideox_test
 done
 
 echo "All videos processed successfully."

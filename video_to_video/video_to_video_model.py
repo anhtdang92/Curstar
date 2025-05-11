@@ -33,8 +33,10 @@ class VideoToVideo_sr():
         generator = generator.to(self.device)
         generator.eval()
 
+        logger.info(f'Loading model from {opt.model_path} ... (this may take several minutes)')
         cfg.model_path = opt.model_path
         load_dict = torch.load(cfg.model_path, map_location='cpu')
+        logger.info('Model loaded.')
         if 'state_dict' in load_dict:
             load_dict = load_dict['state_dict']
         ret = generator.load_state_dict(load_dict, strict=False)
@@ -71,9 +73,10 @@ class VideoToVideo_sr():
         negative_y = text_encoder(self.negative_prompt).detach()
         self.negative_y = negative_y
 
+        self.show_progress = opt.show_progress
 
     def test(self, input: Dict[str, Any], total_noise_levels=1000, \
-                 steps=50, solver_mode='fast', guide_scale=7.5, max_chunk_len=32):
+                 steps=50, solver_mode='fast', guide_scale=7.5, max_chunk_len=32, show_progress=False):
         video_data = input['video_data']
         y = input['y']
         (target_h, target_w) = input['target_res']
@@ -120,7 +123,9 @@ class VideoToVideo_sr():
                 t_max=total_noise_levels - 1,
                 t_min=0,
                 discretization='trailing',
-                chunk_inds=chunk_inds,)
+                chunk_inds=chunk_inds,
+                show_progress=show_progress
+            )
             torch.cuda.empty_cache()
 
             logger.info(f'sampling, finished.')

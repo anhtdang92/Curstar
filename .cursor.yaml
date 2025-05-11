@@ -33,3 +33,8 @@
 
 # Tracked Files
 - test_star_inference.py 
+
+# Git Push Note
+# If you encounter 'fatal: The current branch main has multiple upstream branches, refusing to push.',
+# use the following command to push changes:
+#   git push origin main 
