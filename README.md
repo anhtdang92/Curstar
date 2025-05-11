@@ -146,6 +146,18 @@ Refer to these [instructions](https://github.com/NJU-PCALab/STAR/tree/main/cogvi
 
 Please note that the CogVideX-5B-based model supports only 720x480 input.
 
+## Automated Inference Test
+
+You can test your STAR installation and model setup with the provided script:
+
+```bash
+python test_star_inference.py
+```
+
+This will run a sample inference using the test video and model, with a progress bar enabled. The output will be saved to `./results/cogvideox_test/023_klingai_reedit.mp4`.
+
+If you encounter errors, check the output for troubleshooting information.
+
 ## ❤️ Acknowledgments
 This project is based on [I2VGen-XL](https://github.com/ali-vilab/VGen), [VEnhancer](https://github.com/Vchitect/VEnhancer), [CogVideoX](https://github.com/THUDM/CogVideo) and [OpenVid-1M](https://github.com/NJU-PCALab/OpenVid-1M). Thanks for their awesome works.
 

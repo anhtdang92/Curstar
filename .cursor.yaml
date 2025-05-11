@@ -29,4 +29,7 @@
 
 # Additional Notes
 # - Ensure you have a GPU with at least 24GB of VRAM for optimal performance.
-# - For more details, refer to the README.md file. 
+# - For more details, refer to the README.md file.
+
+# Tracked Files
+- test_star_inference.py 
