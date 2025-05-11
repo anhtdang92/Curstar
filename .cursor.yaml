@@ -82,3 +82,6 @@ git:
     - ".DS_Store"
     - "results/"
     - "pretrained_models/" 
+
+# Note: PowerShell does not support '&&' for command chaining. Use ';' instead.
+# Example: git add .; git commit -m "message"; git push 
