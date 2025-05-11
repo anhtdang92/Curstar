@@ -6,6 +6,10 @@ from typing import Any, Dict, List, Mapping, Tuple
 from easydict import EasyDict
 
 import sys
+import logging
+from tqdm import tqdm
+import time
+
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(base_path)
 from video_to_video.video_to_video_model import VideoToVideo_sr
@@ -15,8 +19,15 @@ from video_super_resolution.color_fix import adain_color_fix
 
 from inference_utils import *
 
-logger = get_logger()
-
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
 
 class STAR():
     def __init__(self, 
@@ -87,56 +98,51 @@ class STAR():
     
 
 def parse_args():
-    parser = ArgumentParser()
-    
-    parser.add_argument("--input_path", required=True, type=str, help="input video path")
-    parser.add_argument("--save_dir", type=str, default='results', help="save directory")
-    parser.add_argument("--file_name", type=str, help="file name")
-    parser.add_argument("--model_path", type=str, default='./pretrained_weight/model.pt', help="model path")
-    parser.add_argument("--prompt", type=str, default='a good video', help="prompt")
-    parser.add_argument("--upscale", type=int, default=4, help='up-scale')
-    parser.add_argument("--max_chunk_len", type=int, default=32, help='max_chunk_len')
-
-    parser.add_argument("--cfg", type=float, default=7.5)
-    parser.add_argument("--solver_mode", type=str, default='fast', help='fast | normal')
-    parser.add_argument("--steps", type=int, default=15)
-    parser.add_argument("--progress", action="store_true", help="Show progress bar during inference")
-
+    parser = argparse.ArgumentParser(description='STAR Video Super-Resolution')
+    parser.add_argument('--solver_mode', type=str, default='fast', help='Solver mode')
+    parser.add_argument('--steps', type=int, default=15, help='Number of steps')
+    parser.add_argument('--input_path', type=str, required=True, help='Input video path')
+    parser.add_argument('--model_path', type=str, required=True, help='Model path')
+    parser.add_argument('--prompt', type=str, required=True, help='Text prompt')
+    parser.add_argument('--upscale', type=int, default=4, help='Upscale factor')
+    parser.add_argument('--max_chunk_len', type=int, default=32, help='Maximum chunk length')
+    parser.add_argument('--file_name', type=str, required=True, help='Output file name')
+    parser.add_argument('--save_dir', type=str, required=True, help='Save directory')
+    parser.add_argument('--progress', action='store_true', help='Show progress bar')
     return parser.parse_args()
 
-def main():
-    
+def main(args):
+    """Main function for STAR inference with progress tracking."""
+    logger.info("Initializing STAR inference...")
+    start_time = time.time()
+
+    try:
+        # Initialize STAR model
+        logger.info("Loading model...")
+        star = STAR(
+            result_dir=args.save_dir,
+            file_name=args.file_name,
+            model_path=args.model_path,
+            solver_mode=args.solver_mode,
+            steps=args.steps,
+            upscale=args.upscale,
+            max_chunk_len=args.max_chunk_len,
+            show_progress=args.progress
+        )
+        
+        # Process video
+        logger.info("Processing video...")
+        output_path = star.enhance_a_video(args.input_path, args.prompt)
+        
+        end_time = time.time()
+        duration = end_time - start_time
+        logger.info(f"Processing completed in {duration:.2f} seconds")
+        logger.info(f"Output saved to: {output_path}")
+        
+    except Exception as e:
+        logger.error(f"Error during inference: {e}")
+        raise
+
+if __name__ == "__main__":
     args = parse_args()
-
-    input_path = args.input_path
-    prompt = args.prompt
-    model_path = args.model_path
-    save_dir = args.save_dir
-    file_name = args.file_name
-    upscale = args.upscale
-    max_chunk_len = args.max_chunk_len
-
-    steps = args.steps
-    solver_mode = args.solver_mode
-    guide_scale = args.cfg
-    progress = args.progress
-
-    assert solver_mode in ('fast', 'normal')
-
-    star = STAR(
-                result_dir=save_dir,
-                file_name=file_name,
-                model_path=model_path,
-                solver_mode=solver_mode,
-                steps=steps,
-                guide_scale=guide_scale,
-                upscale=upscale,
-                max_chunk_len=max_chunk_len,
-                show_progress=progress,
-                )
-
-    star.enhance_a_video(input_path, prompt)
-
-
-if __name__ == '__main__':
-    main()
+    main(args)

@@ -189,3 +189,64 @@ CogVideoX-5B-based model is distributed under the terms of the [CogVideoX Licens
 
 ## Cursor Instructions
 For detailed instructions on setting up and using this project, please refer to the `.cursor.yaml` file in the root directory. This file contains step-by-step guidelines for installation, usage, and additional notes.
+
+## Running Tests
+We provide a convenient PowerShell script to run the STAR inference tests with the correct environment setup:
+
+```powershell
+.\run_test.ps1
+```
+
+This script handles:
+- Virtual environment activation
+- PYTHONPATH configuration
+- Running the inference test
+
+The script ensures that all necessary environment variables are set correctly, making it easier to run tests consistently.
+
+## Model Files Checklist
+Before running inference, ensure you have the following model files in place:
+
+### For I2VGen-XL-based model:
+- `pretrained_models/i2vgenxl/transformer/i2vgenxl_5b_infer_sr.yaml`
+- `pretrained_models/i2vgenxl/transformer/i2vgenxl_5b_infer_sr/1/mp_rank_00_model_states.pt`
+- `pretrained_models/i2vgenxl/t5-v1_1-xxl/config.json`
+- `pretrained_models/i2vgenxl/t5-v1_1-xxl/model.safetensors.index.json`
+- `pretrained_models/i2vgenxl/t5-v1_1-xxl/model-00001-of-00002.safetensors`
+- `pretrained_models/i2vgenxl/t5-v1_1-xxl/model-00002-of-00002.safetensors`
+- `pretrained_models/i2vgenxl/t5-v1_1-xxl/spiece.model`
+- `pretrained_models/i2vgenxl/t5-v1_1-xxl/special_tokens_map.json`
+- `pretrained_models/i2vgenxl/t5-v1_1-xxl/added_tokens.json`
+
+### For CogVideoX-based model:
+- `pretrained_models/cogvideox/transformer/CogVideoX-5B-based/1/mp_rank_00_model_states.pt`
+- `pretrained_models/cogvideox/t5-v1_1-xxl/config.json`
+- `pretrained_models/cogvideox/t5-v1_1-xxl/model.safetensors.index.json`
+- `pretrained_models/cogvideox/t5-v1_1-xxl/model-00001-of-00002.safetensors`
+- `pretrained_models/cogvideox/t5-v1_1-xxl/model-00002-of-00002.safetensors`
+- `pretrained_models/cogvideox/t5-v1_1-xxl/spiece.model`
+- `pretrained_models/cogvideox/t5-v1_1-xxl/special_tokens_map.json`
+- `pretrained_models/cogvideox/t5-v1_1-xxl/added_tokens.json`
+
+## Running Inference
+
+### I2VGen-XL-based Model
+1. Change the paths in `i2vgenxl-based/sat/configs/i2vgenxl_5b/i2vgenxl_5b_infer_sr.yaml` to match your local paths.
+2. Run inference:
+   ```bash
+   python i2vgenxl-based/sat/sample_sr.py
+   ```
+
+### CogVideoX-based Model
+1. Change the paths in `cogvideox-based/sat/configs/cogvideox_5b/cogvideox_5b_infer_sr.yaml` to match your local paths.
+2. Run inference:
+   ```bash
+   python cogvideox-based/sat/sample_sr.py
+   ```
+
+## Troubleshooting
+If you encounter any issues with model downloads, try:
+1. Checking your internet connection
+2. Verifying the model file paths
+3. Ensuring all required files are present
+4. Checking file permissions

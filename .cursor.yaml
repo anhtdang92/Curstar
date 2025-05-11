@@ -38,3 +38,47 @@
 # If you encounter 'fatal: The current branch main has multiple upstream branches, refusing to push.',
 # use the following command to push changes:
 #   git push origin main 
+
+# Cursor configuration file
+# This file contains settings for the Cursor IDE
+
+# Project settings
+project:
+  name: "STAR"
+  description: "STAR: A Video Super-Resolution Project"
+  version: "1.0.0"
+
+# Development environment
+environment:
+  python_version: "3.10"
+  virtual_env: "venv"
+  requirements_file: "requirements.txt"
+
+# Running tests
+tests:
+  script: "run_test.ps1"
+  description: "Run STAR inference tests with proper environment setup"
+  command: ".\run_test.ps1"
+  notes: |
+    The test script handles:
+    - Virtual environment activation
+    - PYTHONPATH configuration
+    - Running the inference test
+
+# Editor settings
+editor:
+  tab_size: 4
+  insert_spaces: true
+  trim_trailing_whitespace: true
+  insert_final_newline: true
+  charset: "utf-8"
+
+# Git settings
+git:
+  ignore:
+    - "venv/"
+    - "__pycache__/"
+    - "*.pyc"
+    - ".DS_Store"
+    - "results/"
+    - "pretrained_models/" 
