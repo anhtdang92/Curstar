@@ -69,15 +69,45 @@
 
 ```
 ## git clone this repository
-git clone https://github.com/NJU-PCALab/STAR.git
-cd STAR
+git clone https://github.com/anhtdang92/Curstar.git
+cd Curstar
 
-## create an environment
+## create an environment (choose one)
+# Using conda:
 conda create -n star python=3.10
 conda activate star
+# Using venv:
+python -m venv venv
+# Activate venv (Windows):
+.\venv\Scripts\Activate.ps1
+# Activate venv (Linux/Mac):
+source venv/bin/activate
+
 pip install -r requirements.txt
-sudo apt-get update && sudo apt-get install ffmpeg libsm6 libxext6  -y
 ```
+
+### Model Files Checklist
+To run STAR, you must have the following model files in place:
+
+- `pretrained_models/cogvideox/vae/3d-vae.pt`
+- `pretrained_models/cogvideox/transformer/CogVideoX-5B-based/1/mp_rank_00_model_states.pt`
+- `pretrained_models/cogvideox/t5-v1_1-xxl/` directory containing:
+    - model-00001-of-00002.safetensors
+    - model-00002-of-00002.safetensors
+    - model.safetensors.index.json
+    - config.json
+    - tokenizer_config.json
+    - special_tokens_map.json
+    - added_tokens.json
+    - spiece.model
+
+If any of these files are missing, use the provided `download_models.py` script to fetch them automatically, or download them manually from the official Hugging Face links in the script.
+
+### Troubleshooting Model Downloads
+- If you encounter issues with model downloads, check your internet connection and available disk space.
+- For manual download, see: https://huggingface.co/THUDM/CogVideoX-2b
+
+---
 
 ## 🚀 Inference
 

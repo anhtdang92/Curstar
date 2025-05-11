@@ -13,6 +13,13 @@
 #    - Linux/Mac: source venv/bin/activate
 # 4. Install dependencies: pip install -r requirements.txt
 
+# Model Files Checklist
+# Ensure the following files exist:
+# - pretrained_models/cogvideox/vae/3d-vae.pt
+# - pretrained_models/cogvideox/transformer/CogVideoX-5B-based/1/mp_rank_00_model_states.pt
+# - pretrained_models/cogvideox/t5-v1_1-xxl/ (with all 8 required files)
+# If missing, run download_models.py or download from https://huggingface.co/THUDM/CogVideoX-2b
+
 # Usage Instructions
 # - Place input videos in the 'input/video/' directory.
 # - Run the inference script: bash video_super_resolution/scripts/inference_sr.sh
