@@ -1,0 +1,23 @@
+# STAR Project Instructions
+# This file contains instructions for the STAR project.
+
+# Project Overview
+# STAR is a video super-resolution project based on the NJU-PCALab/STAR repository.
+# It uses diffusion models to enhance video quality.
+
+# Setup Instructions
+# 1. Clone the repository: git clone https://github.com/anhtdang92/Curstar.git
+# 2. Create a virtual environment: python -m venv venv
+# 3. Activate the virtual environment:
+#    - Windows: .\venv\Scripts\Activate.ps1
+#    - Linux/Mac: source venv/bin/activate
+# 4. Install dependencies: pip install -r requirements.txt
+
+# Usage Instructions
+# - Place input videos in the 'input/video/' directory.
+# - Run the inference script: bash video_super_resolution/scripts/inference_sr.sh
+# - Output videos will be saved in the specified output directory.
+
+# Additional Notes
+# - Ensure you have a GPU with at least 24GB of VRAM for optimal performance.
+# - For more details, refer to the README.md file. 

@@ -142,3 +142,6 @@ If you have any inquiries, please don't hesitate to reach out via email at `ruix
 I2VGen-XL-based models are distributed under the terms of the [MIT License](https://choosealicense.com/licenses/mit/).
 
 CogVideoX-5B-based model is distributed under the terms of the [CogVideoX License](https://huggingface.co/THUDM/CogVideoX-5b/blob/main/LICENSE).
+
+## Cursor Instructions
+For detailed instructions on setting up and using this project, please refer to the `.cursor.yaml` file in the root directory. This file contains step-by-step guidelines for installation, usage, and additional notes.
