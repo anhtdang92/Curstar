@@ -19,6 +19,8 @@
 # - pretrained_models/cogvideox/transformer/CogVideoX-5B-based/1/mp_rank_00_model_states.pt
 # - pretrained_models/cogvideox/t5-v1_1-xxl/ (with all 8 required files)
 # If missing, run download_models.py or download from https://huggingface.co/THUDM/CogVideoX-2b
+#
+# Note: After setup, you may see temp_* folders (e.g., temp_t5, temp_cogvideox, temp_cogvideo). These are not needed and can be safely deleted.
 
 # Usage Instructions
 # - Place input videos in the 'input/video/' directory.

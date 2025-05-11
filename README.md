@@ -103,6 +103,8 @@ To run STAR, you must have the following model files in place:
 
 If any of these files are missing, use the provided `download_models.py` script to fetch them automatically, or download them manually from the official Hugging Face links in the script.
 
+**Note:** After successful model setup, you may see folders like `temp_t5`, `temp_cogvideox`, or `temp_cogvideo` in your project directory. These are temporary folders created during model downloads and are not needed for running STAR. You can safely delete them to keep your workspace clean.
+
 ### Troubleshooting Model Downloads
 - If you encounter issues with model downloads, check your internet connection and available disk space.
 - For manual download, see: https://huggingface.co/THUDM/CogVideoX-2b
