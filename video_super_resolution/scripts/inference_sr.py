@@ -52,6 +52,15 @@ class STAR():
         model_cfg.model_path = self.model_path
         model_cfg.show_progress = show_progress
         self.model = VideoToVideo_sr(model_cfg)
+        # Add torch.compile() for potential speedup on compatible hardware
+        if hasattr(torch, 'compile') and sys.version_info.major == 3 and sys.version_info.minor >= 7: # torch.compile is available and Python version is suitable
+            try:
+                self.model = torch.compile(self.model, mode="reduce-overhead")
+                logger.info("Applied torch.compile() to the model.")
+            except Exception as e:
+                logger.warning(f"Could not apply torch.compile(): {e}")
+        else:
+            logger.info("torch.compile() not available or Python version too old, skipping.")
 
         steps = 15 if solver_mode == 'fast' else steps
         self.solver_mode=solver_mode
