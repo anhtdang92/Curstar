@@ -1,1 +1,1 @@
-A person walking in a city street with buildings in the background
+A test video for shell script execution.

@@ -40,7 +40,7 @@ for i in "${!mp4_files[@]}"; do
     echo "Processing video file: $mp4_file with prompt: $line"
         
     # Run Python script with parameters
-    "F:/Coding Projects/STAR_Orig/STAR/venv/Scripts/python.exe" \
+    ./venv/Scripts/python.exe \
         ./video_super_resolution/scripts/inference_sr.py \
         --solver_mode 'fast' \
         --steps 15 \

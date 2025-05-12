@@ -26,6 +26,8 @@
 # Usage Instructions
 # - Place input videos in the 'input/video/' directory.
 # - Run the inference script: bash video_super_resolution/scripts/inference_sr.sh
+#   (This script has been tested and confirmed to work with bash, e.g., Git Bash on Windows.
+#    The underlying Python script `inference_sr.py` has also been fixed for an `argparse` issue.)
 # - Output videos will be saved in the specified output directory.
 
 # Additional Notes

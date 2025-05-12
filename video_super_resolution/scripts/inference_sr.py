@@ -109,7 +109,7 @@ class STAR():
     
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='STAR Video Super-Resolution')
+    parser = ArgumentParser(description='STAR Video Super-Resolution')
     parser.add_argument('--solver_mode', type=str, default='fast', help='Solver mode')
     parser.add_argument('--steps', type=int, default=15, help='Number of steps')
     parser.add_argument('--input_path', type=str, required=True, help='Input video path')

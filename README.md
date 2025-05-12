@@ -145,6 +145,8 @@ You need to change the paths in `video_super_resolution/scripts/inference_sr.sh`
 bash video_super_resolution/scripts/inference_sr.sh
 ```
 
+**Note on `inference_sr.sh`**: This shell script is a convenient way to process multiple videos located in `input/video/` using prompts from `input/text/prompt.txt`. It iterates through video-prompt pairs and calls the underlying `video_super_resolution/scripts/inference_sr.py` script. Ensure the paths within the shell script (`video_folder_path`, `txt_file_path`, `model_path`, `save_dir`) are correctly set. The python script `inference_sr.py` has also been updated to correctly use `ArgumentParser` (resolving a previous `NameError`). This shell script is now confirmed to work in a `bash` environment (e.g., Git Bash on Windows) by directly calling the virtual environment's Python executable.
+
 ### 2. CogVideoX-based
 Refer to these [instructions](https://github.com/NJU-PCALab/STAR/tree/main/cogvideox-based#cogvideox-based-model-inference) for inference with the CogVideX-5B-based model.
 
