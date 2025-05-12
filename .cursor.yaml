@@ -47,17 +47,68 @@
 
 # Project settings
 project:
-  name: STAR
-  description: Video Super-Resolution and Enhancement Toolkit
-  version: 0.1.0
+  name: STAR Video Processing
+  description: A modern web application for video processing using FastAPI and Next.js
+
+# Project structure
+structure:
+  - name: Backend
+    path: webapp/backend
+    description: FastAPI backend server
+  - name: Frontend
+    path: webapp/frontend-next
+    description: Next.js frontend application
 
 # Development environment
 environment:
-  python_version: "3.8+"
-  node_version: "18+"
-  cuda_version: "11.8+"
-  virtual_env: "venv"
-  requirements_file: "requirements.txt" # Ensures NumPy < 2.0 is installed
+  python:
+    version: "3.9+"
+    packages:
+      - fastapi==0.109.2
+      - uvicorn==0.27.1
+      - python-multipart==0.0.9
+      - websockets==12.0
+      - python-jose==3.3.0
+      - passlib==1.7.4
+      - bcrypt==4.1.2
+      - aiofiles==23.2.1
+      - python-dotenv==1.0.1
+  node:
+    version: "18+"
+    packages:
+      - next
+      - react
+      - react-dom
+      - @mui/material
+      - @emotion/react
+      - @emotion/styled
+      - react-dropzone
+      - react-player
+      - axios
+
+# Development servers
+servers:
+  backend:
+    command: cd webapp/backend && python main.py
+    port: 8000
+    description: FastAPI backend server
+  frontend:
+    command: cd webapp/frontend-next && npm run dev
+    port: 3000
+    description: Next.js development server
+
+# Git configuration
+git:
+  branch: main
+  remote: origin
+  ignore:
+    - node_modules/
+    - .next/
+    - __pycache__/
+    - venv/
+    - .env
+    - .env.local
+    - .DS_Store
 
 # Running tests
 tests:
@@ -78,63 +129,33 @@ editor:
   insert_final_newline: true
   charset: "utf-8"
 
-# Git settings
-git:
-  ignore:
-    - "venv/"
-    - "__pycache__/"
-    - "*.pyc"
-    - ".DS_Store"
-    - "results/"
-    - "pretrained_models/"
-  branch_naming: "feature/description"
-  commit_message_format: "type(scope): description"
-  protected_branches:
-    - "main"
-    - "develop"
-
-# Dependencies
-dependencies:
-  python:
-    - torch
-    - torchvision
-    - numpy
-    - opencv-python
-    - fastapi
-    - uvicorn
-    - python-multipart
-    - websockets
-    - python-jose
-    - passlib
-    - bcrypt
-    - aiofiles
-    - python-dotenv
-  node:
-    - react
-    - @mui/material
-    - @emotion/react
-    - @emotion/styled
-    - axios
-    - react-dropzone
-    - react-player
-
 # Project status
 status:
-  last_updated: "2024-02-20"
-  current_focus: "Web application development"
-  completed_tasks:
-    - "Basic FastAPI backend structure"
-    - "Basic React frontend with Material-UI"
-    - "Video upload and preview functionality"
-    - "Model selection interface"
-    - "Real-time progress tracking UI"
-  next_steps:
-    - "Integrate STAR processing code into backend"
-    - "Implement proper file handling and cleanup"
-    - "Add proper error handling and validation"
-    - "Implement user authentication system"
-    - "Add processing queue management"
-    - "Add email notifications for completed jobs"
+  version: "0.1.0"
+  stage: "development"
+  completed:
+    - "Project structure setup"
+    - "Backend API implementation"
+    - "Frontend UI components"
+    - "Video upload functionality"
+    - "Model selection"
+    - "Real-time progress updates"
+    - "Processed video preview"
+    - "TypeScript integration"
+  in_progress:
+    - "Error handling improvements"
+    - "Unit tests"
+  planned:
+    - "CI/CD pipeline"
+    - "Production deployment"
+    - "User authentication"
+    - "Batch processing"
+    - "Processing history"
+  issues:
+    - "Add comprehensive error handling"
+    - "Implement unit tests"
+    - "Set up CI/CD pipeline"
+    - "Configure production deployment"
 
 # Known issues
 issues:

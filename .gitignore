@@ -1,4 +1,8 @@
-# Python virtual environment
+# Node
+node_modules/
+.next/
+
+# Python
 venv/
 env/
 ENV/
@@ -61,4 +65,23 @@ saved_models/
 *.tmp
 *.temp
 .coverage
-htmlcov/ 
+htmlcov/
+
+# OS
+Thumbs.db
+
+# Video and Model Files
+*.mp4
+*.avi
+*.mov
+*.zip
+*.tar
+*.tar.gz
+
+# Environment
+.env.*
+
+# Misc
+*.swp
+*.swo
+.vscode/ 
