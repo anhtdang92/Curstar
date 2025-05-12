@@ -50,6 +50,7 @@ class STAR():
 
         model_cfg = EasyDict(__name__='model_cfg')
         model_cfg.model_path = self.model_path
+        model_cfg.show_progress = show_progress
         self.model = VideoToVideo_sr(model_cfg)
 
         steps = 15 if solver_mode == 'fast' else steps
@@ -85,7 +86,8 @@ class STAR():
             data_tensor = collate_fn(pre_data, 'cuda:0')
             output = self.model.test(data_tensor, total_noise_levels, steps=self.steps, \
                                 solver_mode=self.solver_mode, guide_scale=self.guide_scale, \
-                                max_chunk_len=self.max_chunk_len
+                                max_chunk_len=self.max_chunk_len,
+                                show_progress=self.show_progress
                                 )
 
         output = tensor2vid(output)
@@ -108,7 +110,7 @@ def parse_args():
     parser.add_argument('--max_chunk_len', type=int, default=32, help='Maximum chunk length')
     parser.add_argument('--file_name', type=str, required=True, help='Output file name')
     parser.add_argument('--save_dir', type=str, required=True, help='Save directory')
-    parser.add_argument('--progress', action='store_true', help='Show progress bar')
+    parser.add_argument('--show_progress', action='store_true', help='Show progress bar')
     return parser.parse_args()
 
 def main(args):
@@ -127,7 +129,7 @@ def main(args):
             steps=args.steps,
             upscale=args.upscale,
             max_chunk_len=args.max_chunk_len,
-            show_progress=args.progress
+            show_progress=args.show_progress
         )
         
         # Process video

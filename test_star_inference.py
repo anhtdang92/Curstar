@@ -38,7 +38,7 @@ def run_star_inference():
         max_chunk_len=32,
         file_name='023_klingai_reedit.mp4',
         save_dir='./results/cogvideox_test',
-        progress=True  # Enable progress bar
+        show_progress=True  # Enable progress bar
     )
 
     try:

@@ -67,6 +67,10 @@
 ## ⚙️ Dependencies and Installation
 **VRAM requirement**: Upscaling the provided toy example by 4x, with 72 frames, a width of 426, and a height of 240, requires around 39GB of VRAM using the default settings. If you encounter an OOM problem, you can set a smaller frame_length in inference_sr.sh. We recommend using a GPU with at least 24GB of VRAM to run this project. 
 
+**Python Environment**: This project requires Python 3.10. 
+
+**NumPy Version**: This project requires NumPy < 2.0. It has been tested with NumPy 1.26.4. Please ensure you have a compatible version installed.
+
 ```
 ## git clone this repository
 git clone https://github.com/anhtdang92/Curstar.git

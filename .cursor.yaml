@@ -7,11 +7,12 @@
 
 # Setup Instructions
 # 1. Clone the repository: git clone https://github.com/anhtdang92/Curstar.git
-# 2. Create a virtual environment: python -m venv venv
+# 2. Create a virtual environment: python -m venv venv (ensure Python 3.10)
 # 3. Activate the virtual environment:
 #    - Windows: .\venv\Scripts\Activate.ps1
 #    - Linux/Mac: source venv/bin/activate
 # 4. Install dependencies: pip install -r requirements.txt
+#    Note: This project requires NumPy < 2.0 (e.g., numpy==1.26.4). The requirements.txt should handle this.
 
 # Model Files Checklist
 # Ensure the following files exist:
@@ -52,7 +53,7 @@ project:
 environment:
   python_version: "3.10"
   virtual_env: "venv"
-  requirements_file: "requirements.txt"
+  requirements_file: "requirements.txt" # Ensures NumPy < 2.0 is installed
 
 # Running tests
 tests:
