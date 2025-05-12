@@ -1,10 +1,21 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
 import ReactPlayer from 'react-player';
 import { api, Model } from '../services/api';
+
+// Define the structure of the progress data received from WebSocket
+interface ProgressData {
+  status: 'queued' | 'processing' | 'complete' | 'failed';
+  progress?: number;
+  current_step?: number;
+  total_steps?: number;
+  fps?: number;
+  eta_seconds?: number;
+  error?: string;
+}
 
 interface VideoProcessorProps {
   onProcessingComplete?: (resultUrl: string) => void;
@@ -17,9 +28,24 @@ export const VideoProcessor: React.FC<VideoProcessorProps> = ({ onProcessingComp
   const [processing, setProcessing] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [resultUrl, setResultUrl] = useState<string>('');
+  const [currentStep, setCurrentStep] = useState<number | null>(null);
+  const [totalSteps, setTotalSteps] = useState<number | null>(null);
+  const [fps, setFps] = useState<number | null>(null);
+  const [eta, setEta] = useState<number | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string>('');
+  const [jobId, setJobId] = useState<string | null>(null);
+  const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
     fetchModels();
+
+    // Cleanup WebSocket on component unmount
+    return () => {
+      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+        console.log('Closing WebSocket on unmount');
+        wsRef.current.close();
+      }
+    };
   }, []);
 
   const fetchModels = async () => {
@@ -35,6 +61,17 @@ export const VideoProcessor: React.FC<VideoProcessorProps> = ({ onProcessingComp
     if (acceptedFiles.length > 0) {
       setFile(acceptedFiles[0]);
       setResultUrl('');
+      setProgress(0);
+      setProcessing(false);
+      setStatusMessage('');
+      setCurrentStep(null);
+      setTotalSteps(null);
+      setFps(null);
+      setEta(null);
+      setJobId(null);
+      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+         wsRef.current.close();
+      }
     }
   };
 
@@ -49,35 +86,112 @@ export const VideoProcessor: React.FC<VideoProcessorProps> = ({ onProcessingComp
   const handleProcess = async () => {
     if (!file || !selectedModel) return;
 
+    // Reset previous state
     setProcessing(true);
     setProgress(0);
+    setResultUrl('');
+    setStatusMessage('Uploading video...');
+    setJobId(null);
+    setCurrentStep(null);
+    setTotalSteps(null);
+    setFps(null);
+    setEta(null);
+
+    // Close existing WebSocket connection if any
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      console.log('Closing existing WebSocket connection');
+      wsRef.current.close();
+    }
 
     try {
-      // Upload file
+      // 1. Upload file
       const { filename } = await api.uploadVideo(file);
+      setStatusMessage('Starting processing...');
 
-      // Start processing
-      await api.processVideo(filename, selectedModel);
+      // 2. Start processing job - This now returns a job ID
+      const { job_id } = await api.processVideo(filename, selectedModel);
+      setJobId(job_id);
+      setStatusMessage(`Processing job ${job_id} queued...`);
 
-      // Connect to WebSocket for progress updates
-      const ws = new WebSocket('ws://localhost:8000/ws');
+      // 3. Connect to WebSocket for progress updates using job_id
+      console.log(`Connecting to WebSocket for job ID: ${job_id}`);
+      const wsUrl = `ws://${window.location.hostname}:8000/ws/${job_id}`;
+      console.log(`WebSocket URL: ${wsUrl}`);
+      const ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
+
+      ws.onopen = () => {
+        console.log(`WebSocket connected for job ${job_id}`);
+        setStatusMessage('Connected for progress updates...');
+      };
+
       ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.progress) {
-          setProgress(data.progress);
-        }
-        if (data.status === 'complete') {
-          const resultUrl = api.getResultUrl(filename);
-          setResultUrl(resultUrl);
-          if (onProcessingComplete) {
-            onProcessingComplete(resultUrl);
+        try {
+          const data: ProgressData = JSON.parse(event.data);
+          console.log('WS Data:', data);
+
+          // Update state based on received data
+          setProgress(data.progress ?? progress);
+          setCurrentStep(data.current_step ?? currentStep);
+          setTotalSteps(data.total_steps ?? totalSteps);
+          setFps(data.fps ?? fps);
+          setEta(data.eta_seconds ?? eta);
+
+          // Update status message
+          switch (data.status) {
+            case 'queued':
+              setStatusMessage('Job is queued...');
+              break;
+            case 'processing':
+              const progressText = data.progress !== undefined ? `${data.progress}%` : 'Processing...';
+              const stepText = currentStep !== null && totalSteps !== null
+                ? `(Step ${currentStep}/${totalSteps})` : '';
+              setStatusMessage(`Processing ${progressText} ${stepText}`);
+              break;
+            case 'complete':
+              setStatusMessage('Processing complete!');
+              setProgress(100);
+              setProcessing(false);
+              const finalResultUrl = api.getResultUrl(job_id);
+              setResultUrl(finalResultUrl);
+              if (onProcessingComplete) {
+                onProcessingComplete(finalResultUrl);
+              }
+              ws.close();
+              break;
+            case 'failed':
+              setStatusMessage(`Processing failed: ${data.error || 'Unknown error'}`);
+              setProcessing(false);
+              setProgress(0);
+              ws.close();
+              break;
+            default:
+              setStatusMessage('Receiving unknown update...');
           }
-          setProcessing(false);
-          ws.close();
+        } catch (e) {
+          console.error('Error parsing WebSocket message:', e);
+          setStatusMessage('Error receiving progress updates.');
         }
       };
-    } catch (error) {
+
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+        setStatusMessage('WebSocket connection error.');
+        setProcessing(false);
+      };
+
+      ws.onclose = (event) => {
+        console.log(`WebSocket closed for job ${job_id}. Code: ${event.code}, Reason: ${event.reason}`);
+        if (event.code !== 1000 && event.code !== 1005 && processing) {
+             setStatusMessage('WebSocket connection closed unexpectedly.');
+             setProcessing(false);
+        }
+        wsRef.current = null;
+      };
+
+    } catch (error: any) {
       console.error('Error processing video:', error);
+      setStatusMessage(`Error: ${error.response?.data?.detail || error.message || 'Failed to start processing.'}`);
       setProcessing(false);
     }
   };
@@ -104,7 +218,7 @@ export const VideoProcessor: React.FC<VideoProcessorProps> = ({ onProcessingComp
         )}
       </Box>
 
-      <FormControl fullWidth sx={{ mb: 3 }}>
+      <FormControl fullWidth sx={{ mb: 3 }} disabled={processing}>
         <InputLabel>Select Model</InputLabel>
         <Select
           value={selectedModel}
@@ -129,10 +243,26 @@ export const VideoProcessor: React.FC<VideoProcessorProps> = ({ onProcessingComp
         {processing ? 'Processing...' : 'Process Video'}
       </Button>
 
-      {processing && (
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <CircularProgress variant="determinate" value={progress} sx={{ mr: 2 }} />
-          <Typography>Processing: {progress}%</Typography>
+      {(processing || statusMessage) && (
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, flexDirection: 'column' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            {processing && <CircularProgress variant={progress > 0 ? "determinate" : "indeterminate"} value={progress} sx={{ mr: 2 }} />}
+            <Typography>{statusMessage}</Typography>
+          </Box>
+          {processing && (
+            <Typography variant="body2" color="text.secondary">
+              {currentStep !== null && totalSteps !== null && (
+                <>Step {currentStep} / {totalSteps} &nbsp;|&nbsp; </>
+              )}
+              {fps !== null && (
+                <>{fps.toFixed(2)} FPS &nbsp;|&nbsp; </>
+              )}
+              {eta !== null && Number.isFinite(eta) && (
+                <>ETA: {Math.round(eta)}s</>
+              )}
+              {(currentStep === null && fps === null && eta === null) && "Waiting for details..."}
+            </Typography>
+          )}
         </Box>
       )}
 
@@ -154,6 +284,8 @@ export const VideoProcessor: React.FC<VideoProcessorProps> = ({ onProcessingComp
             variant="outlined"
             href={resultUrl}
             download
+            target="_blank"
+            rel="noopener noreferrer"
             sx={{ mt: 2 }}
           >
             Download Processed Video

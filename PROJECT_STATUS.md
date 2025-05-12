@@ -65,6 +65,7 @@ This document tracks the current status, planned features, known bugs, and futur
 - [x] Upgraded frontend to Next.js 14.2.x (latest as of May 2025)
 - [x] Added `start_servers.bat` script to launch both backend and frontend servers at once
 - [x] Fixed hydration error: moved Material-UI theming to a client component (`theme-provider.tsx`) and made `layout.tsx` a server component
+- [x] Added `git_push.bat` script for automated git add, commit, and push to origin main
 
 ## 📝 Next Steps
 

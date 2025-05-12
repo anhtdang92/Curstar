@@ -70,7 +70,7 @@ class STAR():
         self.max_chunk_len=max_chunk_len
         self.show_progress = show_progress
 
-    def enhance_a_video(self, video_path, prompt):
+    def enhance_a_video(self, video_path, prompt, progress_callback=None):
         logger.info('input video path: {}'.format(video_path))
         text = prompt
         logger.info('text: {}'.format(text))
@@ -96,7 +96,8 @@ class STAR():
             output = self.model.test(data_tensor, total_noise_levels, steps=self.steps, \
                                 solver_mode=self.solver_mode, guide_scale=self.guide_scale, \
                                 max_chunk_len=self.max_chunk_len,
-                                show_progress=self.show_progress
+                                show_progress=self.show_progress,
+                                progress_callback=progress_callback
                                 )
 
         output = tensor2vid(output)
@@ -127,6 +128,11 @@ def main(args):
     logger.info("Initializing STAR inference...")
     start_time = time.time()
 
+    # Define the progress callback function
+    def print_progress_callback(progress_data):
+        """Prints progress data as JSON to stdout."""
+        print(json.dumps(progress_data), flush=True)
+
     try:
         # Initialize STAR model
         logger.info("Loading model...")
@@ -143,7 +149,11 @@ def main(args):
         
         # Process video
         logger.info("Processing video...")
-        output_path = star.enhance_a_video(args.input_path, args.prompt)
+        output_path = star.enhance_a_video(
+            args.input_path, 
+            args.prompt, 
+            progress_callback=print_progress_callback
+        )
         
         end_time = time.time()
         duration = end_time - start_time

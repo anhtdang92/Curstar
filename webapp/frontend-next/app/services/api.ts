@@ -23,8 +23,9 @@ export const api = {
     return response.data;
   },
 
-  processVideo: async (filename: string, model: string): Promise<void> => {
-    await axios.post(`${API_BASE_URL}/process`, { filename, model });
+  processVideo: async (filename: string, model: string): Promise<{ job_id: string }> => {
+    const response = await axios.post(`${API_BASE_URL}/process`, { filename, model });
+    return response.data;
   },
 
   getResultUrl: (filename: string): string => {

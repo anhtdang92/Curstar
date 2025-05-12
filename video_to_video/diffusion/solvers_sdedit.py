@@ -3,6 +3,7 @@
 import torch
 import torchsde
 from tqdm.auto import trange
+import time
 
 from video_to_video.utils.logger import get_logger
 
@@ -38,15 +39,18 @@ def sample_heun(noise,
                 s_tmin=0.,
                 s_tmax=float('inf'),
                 s_noise=1.,
-                show_progress=True):
+                show_progress=True,
+                progress_callback=None):
     """
     Implements Algorithm 2 (Heun steps) from Karras et al. (2022).
     """
     x = noise * sigmas[0]
-    for i in trange(len(sigmas) - 1, disable=not show_progress):
+    start_time = time.time()
+    total_steps = len(sigmas) - 1
+    for i in trange(total_steps, disable=not show_progress):
         gamma = 0.
         if s_tmin <= sigmas[i] <= s_tmax and sigmas[i] < float('inf'):
-            gamma = min(s_churn / (len(sigmas) - 1), 2**0.5 - 1)
+            gamma = min(s_churn / total_steps, 2**0.5 - 1)
         eps = torch.randn_like(x) * s_noise
         sigma_hat = sigmas[i] * (gamma + 1)
         if gamma > 0:
@@ -71,6 +75,22 @@ def sample_heun(noise,
                 d_2 = (x_2 - denoised_2) / sigmas[i + 1]
                 d_prime = (d + d_2) / 2
                 x = x + d_prime * dt
+
+        if progress_callback:
+            current_step = i + 1
+            elapsed_time = time.time() - start_time
+            if elapsed_time > 0:
+                fps = current_step / elapsed_time
+                eta = (total_steps - current_step) / fps if fps > 0 else float('inf')
+                progress = int((current_step / total_steps) * 100)
+                progress_callback({
+                    'status': 'processing',
+                    'progress': progress,
+                    'current_step': current_step,
+                    'total_steps': total_steps,
+                    'fps': fps,
+                    'eta_seconds': eta
+                })
     return x
 
 
@@ -148,7 +168,8 @@ def sample_dpmpp_2m_sde(noise,
                         s_noise=1.,
                         solver_type='midpoint',
                         show_progress=True,
-                        variant_info=None):
+                        variant_info=None,
+                        progress_callback=None):
     """
     DPM-Solver++ (2M) SDE.
     """
@@ -161,8 +182,9 @@ def sample_dpmpp_2m_sde(noise,
     old_denoised = None
     h_last = None
 
-    for i in trange(len(sigmas) - 1, disable=not show_progress):
-        logger.info(f'step: {i}')
+    start_time = time.time()
+    total_steps = len(sigmas) - 1
+    for i in trange(total_steps, disable=not show_progress):
         if sigmas[i] == float('inf'):
             # Euler method
             denoised = model(noise, sigmas[i], variant_info=variant_info)
@@ -196,6 +218,22 @@ def sample_dpmpp_2m_sde(noise,
 
             old_denoised = denoised
             h_last = h
+
+        if progress_callback:
+            current_step = i + 1
+            elapsed_time = time.time() - start_time
+            if elapsed_time > 0:
+                fps = current_step / elapsed_time
+                eta = (total_steps - current_step) / fps if fps > 0 else float('inf')
+                progress = int((current_step / total_steps) * 100)
+                progress_callback({
+                    'status': 'processing',
+                    'progress': progress,
+                    'current_step': current_step,
+                    'total_steps': total_steps,
+                    'fps': fps,
+                    'eta_seconds': eta
+                })
 
     if variant_info is not None and variant_info.get('type') == 'variant1':
         x_long, x_short = x.chunk(2, dim=0)

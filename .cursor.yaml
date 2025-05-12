@@ -223,4 +223,8 @@ guidelines:
 # Hydration error fix:
 # - Material-UI theming is now handled in a client component (theme-provider.tsx)
 # - layout.tsx is a server component (no 'use client')
-# If you see hydration errors, ensure all browser-only logic is in a client component. 
+# If you see hydration errors, ensure all browser-only logic is in a client component.
+
+# To automatically add, commit, and push all changes to origin main, use:
+#   git_push.bat
+# This script will prompt for a commit message and push to origin main. 
