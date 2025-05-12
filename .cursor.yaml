@@ -47,13 +47,15 @@
 
 # Project settings
 project:
-  name: "STAR"
-  description: "STAR: A Video Super-Resolution Project"
-  version: "1.0.0"
+  name: STAR
+  description: Video Super-Resolution and Enhancement Toolkit
+  version: 0.1.0
 
 # Development environment
 environment:
-  python_version: "3.10"
+  python_version: "3.8+"
+  node_version: "18+"
+  cuda_version: "11.8+"
   virtual_env: "venv"
   requirements_file: "requirements.txt" # Ensures NumPy < 2.0 is installed
 
@@ -84,7 +86,80 @@ git:
     - "*.pyc"
     - ".DS_Store"
     - "results/"
-    - "pretrained_models/" 
+    - "pretrained_models/"
+  branch_naming: "feature/description"
+  commit_message_format: "type(scope): description"
+  protected_branches:
+    - "main"
+    - "develop"
+
+# Dependencies
+dependencies:
+  python:
+    - torch
+    - torchvision
+    - numpy
+    - opencv-python
+    - fastapi
+    - uvicorn
+    - python-multipart
+    - websockets
+    - python-jose
+    - passlib
+    - bcrypt
+    - aiofiles
+    - python-dotenv
+  node:
+    - react
+    - @mui/material
+    - @emotion/react
+    - @emotion/styled
+    - axios
+    - react-dropzone
+    - react-player
+
+# Project status
+status:
+  last_updated: "2024-02-20"
+  current_focus: "Web application development"
+  completed_tasks:
+    - "Basic FastAPI backend structure"
+    - "Basic React frontend with Material-UI"
+    - "Video upload and preview functionality"
+    - "Model selection interface"
+    - "Real-time progress tracking UI"
+  next_steps:
+    - "Integrate STAR processing code into backend"
+    - "Implement proper file handling and cleanup"
+    - "Add proper error handling and validation"
+    - "Implement user authentication system"
+    - "Add processing queue management"
+    - "Add email notifications for completed jobs"
+
+# Known issues
+issues:
+  - "WebSocket connection may need reconnection logic for long-running processes"
+  - "Need to handle large file uploads properly"
+  - "Need to implement proper cleanup of temporary files"
+  - "Need to handle CUDA out-of-memory errors gracefully"
+  - "Need to implement proper error handling for failed processing jobs"
+
+# Development guidelines
+guidelines:
+  code_style:
+    python: "PEP 8"
+    javascript: "Airbnb"
+  testing:
+    python: "pytest"
+    javascript: "jest"
+  documentation:
+    format: "Markdown"
+    required_sections:
+      - "Description"
+      - "Installation"
+      - "Usage"
+      - "API Reference"
+      - "Contributing"
 
 # Note: PowerShell does not support '&&' for command chaining. Use ';' instead.
 # Example: git add .; git commit -m "message"; git push 

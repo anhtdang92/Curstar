@@ -1,3 +1,124 @@
+# STAR: Video Super-Resolution and Enhancement
+
+STAR is a comprehensive video processing toolkit that combines multiple state-of-the-art models for video super-resolution and enhancement.
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.8+
+- CUDA-compatible GPU (RTX 4090 recommended)
+- Git
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/STAR.git
+cd STAR
+```
+
+2. Create and activate a virtual environment:
+```bash
+python -m venv venv
+source venv/Scripts/activate  # Windows
+# OR
+source venv/bin/activate  # Linux/Mac
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Download required models:
+```bash
+python download_models.py
+```
+
+### Running the Web Application
+
+1. Start the backend server:
+```bash
+cd webapp/backend
+pip install -r requirements.txt
+python main.py
+```
+
+2. Start the frontend development server:
+```bash
+cd webapp/frontend
+npm install
+npm start
+```
+
+3. Open your browser and navigate to `http://localhost:3000`
+
+### Running from Command Line
+
+1. Place your input video in `./input/video/`
+2. Add your prompt to `./input/text/prompt.txt`
+3. Run the inference script:
+```bash
+bash ./video_super_resolution/scripts/inference_sr.sh
+```
+
+## 📁 Project Structure
+
+```
+STAR/
+├── video_super_resolution/    # Video super-resolution models
+├── cogvideox-based/          # CogVideoX implementation
+├── webapp/                   # Web application
+│   ├── backend/             # FastAPI backend
+│   └── frontend/            # React frontend
+├── input/                   # Input files
+│   ├── video/              # Input videos
+│   └── text/               # Text prompts
+├── output/                 # Output files
+├── requirements.txt        # Python dependencies
+└── download_models.py      # Model download script
+```
+
+## 🛠️ Available Models
+
+- **I2VGen-XL**: Light and heavy degradation models
+- **CogVideoX-5B**: Advanced video generation model
+
+## 🌐 Web Interface Features
+
+- Video upload with drag-and-drop
+- Video preview
+- Model selection
+- Real-time processing status
+- Result video display and download
+- Processing history (coming soon)
+- Batch processing (coming soon)
+- Custom model configurations (coming soon)
+
+## 🐛 Known Issues
+
+- WebSocket connection may need reconnection logic for long-running processes
+- Large file uploads need proper handling
+- Temporary files need proper cleanup
+- CUDA out-of-memory errors need graceful handling
+- Failed processing jobs need proper error handling
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## 📞 Support
+
+For support, please open an issue in the GitHub repository or contact the maintainers.
+
+---
+*Last Updated: 2024-02-20*
+
 <div align="center">
     <h1>
     STAR: Spatial-Temporal Augmentation with Text-to-Video Models for Real-World Video Super-Resolution
