@@ -59,6 +59,12 @@ This document tracks the current status, planned features, known bugs, and futur
 - [x] Implement video upload and preview functionality
 - [x] Implement model selection interface
 - [x] Implement real-time progress tracking UI
+- [x] Added `start_backend.bat` script for Windows users to auto-activate venv and start the backend server with one command.
+- [x] Added `start_frontend.bat` script for Windows users to easily start the Next.js frontend development server.
+- [x] Added `start_servers.bat` script to start both backend and frontend servers with one command.
+- [x] Upgraded frontend to Next.js 14.2.x (latest as of May 2025)
+- [x] Added `start_servers.bat` script to launch both backend and frontend servers at once
+- [x] Fixed hydration error: moved Material-UI theming to a client component (`theme-provider.tsx`) and made `layout.tsx` a server component
 
 ## 📝 Next Steps
 
@@ -95,4 +101,4 @@ This document tracks the current status, planned features, known bugs, and futur
    - [ ] Set up backup and recovery
 
 ---
-*Last Updated: 2024-02-20* 
+*Last Updated: 2025-05-12* 

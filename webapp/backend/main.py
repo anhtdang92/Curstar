@@ -7,6 +7,7 @@ import uuid
 from typing import List
 import asyncio
 from datetime import datetime
+from pydantic import BaseModel
 
 app = FastAPI(title="STAR Video Processing API")
 
@@ -26,11 +27,27 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 # Available models
-AVAILABLE_MODELS = {
-    "i2vgenxl_light": "I2VGen-XL (Light Degradation)",
-    "i2vgenxl_heavy": "I2VGen-XL (Heavy Degradation)",
-    "cogvideox": "CogVideoX-5B"
-}
+AVAILABLE_MODELS = [
+    {
+        "id": "i2vgenxl_light",
+        "name": "I2VGen-XL (Light Degradation)",
+        "description": "Best for videos with minor quality issues"
+    },
+    {
+        "id": "i2vgenxl_heavy",
+        "name": "I2VGen-XL (Heavy Degradation)",
+        "description": "Best for videos with severe quality issues"
+    },
+    {
+        "id": "cogvideox",
+        "name": "CogVideoX-5B",
+        "description": "Advanced model for high-quality video enhancement"
+    }
+]
+
+class ProcessRequest(BaseModel):
+    filename: str
+    model: str
 
 @app.get("/")
 async def read_root():
@@ -38,7 +55,7 @@ async def read_root():
 
 @app.get("/models")
 async def get_models():
-    return {"models": AVAILABLE_MODELS}
+    return AVAILABLE_MODELS
 
 @app.post("/upload")
 async def upload_video(file: UploadFile = File(...)):
@@ -58,17 +75,18 @@ async def upload_video(file: UploadFile = File(...)):
     }
 
 @app.post("/process")
-async def process_video(filename: str, model: str):
-    if model not in AVAILABLE_MODELS:
+async def process_video(request: ProcessRequest):
+    filename = request.filename
+    model = request.model
+    valid_model_ids = [m["id"] for m in AVAILABLE_MODELS]
+    if model not in valid_model_ids:
         return {"error": "Invalid model selection"}
-    
     # TODO: Implement actual video processing using STAR
     # This is where we'll integrate the existing STAR processing code
-    
     # For now, just return a mock response
     return {
         "status": "processing",
-        "message": f"Processing {filename} with {AVAILABLE_MODELS[model]}",
+        "message": f"Processing {filename} with {model}",
         "timestamp": datetime.now().isoformat()
     }
 

@@ -11,7 +11,9 @@ export interface Model {
 export const api = {
   getModels: async (): Promise<Model[]> => {
     const response = await axios.get(`${API_BASE_URL}/models`);
-    return response.data;
+    if (Array.isArray(response.data)) return response.data;
+    if (Array.isArray(response.data.models)) return response.data.models;
+    return [];
   },
 
   uploadVideo: async (file: File): Promise<{ filename: string }> => {

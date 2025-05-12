@@ -1,20 +1,4 @@
-'use client';
-
-import React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
+import MuiThemeProvider from './theme-provider';
 
 export default function RootLayout({
   children,
@@ -24,10 +8,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
+        <MuiThemeProvider>
           {children}
-        </ThemeProvider>
+        </MuiThemeProvider>
       </body>
     </html>
   );

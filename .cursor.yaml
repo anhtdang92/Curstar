@@ -182,5 +182,45 @@ guidelines:
       - "API Reference"
       - "Contributing"
 
+# Note for Windows/PowerShell users:
+# PowerShell does not support '&&' for chaining commands like bash.
+# To push your changes, run each command separately:
+#   git add .
+#   git commit -m "your message"
+#   git push origin main
+# If you see 'fatal: The current branch main has multiple upstream branches, refusing to push.',
+# always use 'git push origin main' to specify the remote and branch.
+
 # Note: PowerShell does not support '&&' for command chaining. Use ';' instead.
 # Example: git add .; git commit -m "message"; git push 
+
+# Windows users: To start both backend and frontend servers with one command:
+#   start_servers.bat
+# This will open two command windows, one for each server.
+# Backend will be available at: http://localhost:8000
+# Frontend will be available at: http://localhost:3000
+#
+# The frontend uses Next.js 14.2.x (latest as of May 2025)
+
+# Windows users: To start the backend and auto-activate the venv, use:
+#   cd webapp/backend
+#   start_backend.bat
+# This will activate the virtual environment and run the FastAPI server.
+
+# Windows users: To start the frontend and run the Next.js dev server, use:
+#   cd webapp/frontend-next
+#   start_frontend.bat
+# This will start the Next.js development server and keep the window open for logs.
+
+# Note for Windows/PowerShell users:
+# PowerShell does not support '&&' for chaining commands like bash.
+# To run batch files, first navigate to the directory, then run the batch file:
+#   cd webapp/frontend-next
+#   start_frontend.bat
+# Or use a semicolon ';' for one-liners:
+#   cd webapp/frontend-next; start_frontend.bat 
+
+# Hydration error fix:
+# - Material-UI theming is now handled in a client component (theme-provider.tsx)
+# - layout.tsx is a server component (no 'use client')
+# If you see hydration errors, ensure all browser-only logic is in a client component. 
