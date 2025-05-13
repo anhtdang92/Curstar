@@ -62,7 +62,7 @@ structure:
 # Development environment
 environment:
   python:
-    version: "3.9+"
+    version: "3.10+"
     packages:
       - fastapi==0.109.2
       - uvicorn==0.27.1
@@ -142,6 +142,11 @@ status:
     - "Real-time progress updates"
     - "Processed video preview"
     - "TypeScript integration"
+    - "Hydration error fix (Material-UI theming in client component)"
+    - "Windows batch scripts for backend/frontend/start_servers"
+    - "Next.js frontend upgrade to 14.2.x and 15.x"
+    - "Automated git push script"
+    - "Automated inference test script (run_test.ps1)"
   in_progress:
     - "Error handling improvements"
     - "Unit tests"
@@ -200,7 +205,7 @@ guidelines:
 # Backend will be available at: http://localhost:8000
 # Frontend will be available at: http://localhost:3000
 #
-# The frontend uses Next.js 14.2.x (latest as of May 2025)
+# The frontend uses Next.js 14.2.x and 15.x (latest as of May 2025)
 
 # Windows users: To start the backend and auto-activate the venv, use:
 #   cd webapp/backend
@@ -211,6 +216,11 @@ guidelines:
 #   cd webapp/frontend-next
 #   start_frontend.bat
 # This will start the Next.js development server and keep the window open for logs.
+
+# Troubleshooting:
+# - If you see CUDA out-of-memory errors, reduce frame length or use a GPU with more VRAM.
+# - If you see git push errors, use 'git push origin main'.
+# - If models are missing, run 'python download_models.py'.
 
 # Note for Windows/PowerShell users:
 # PowerShell does not support '&&' for chaining commands like bash.

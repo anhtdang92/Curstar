@@ -6,7 +6,7 @@ This document tracks the current status, planned features, known bugs, and futur
 
 - [ ] **Web Application Interface**
   - [x] Basic FastAPI backend structure
-  - [x] Basic React frontend with Material-UI
+  - [x] Basic React/Next.js frontend with Material-UI
   - [x] Video upload and preview functionality
   - [x] Model selection interface
   - [x] Real-time progress tracking UI
@@ -55,51 +55,34 @@ This document tracks the current status, planned features, known bugs, and futur
 - [x] Update documentation (README.md, .cursor.yaml) regarding `inference_sr.sh` fixes
 - [x] Create this `PROJECT_STATUS.md` file
 - [x] Set up basic FastAPI backend structure
-- [x] Set up basic React frontend with Material-UI
+- [x] Set up basic React/Next.js frontend with Material-UI
 - [x] Implement video upload and preview functionality
 - [x] Implement model selection interface
 - [x] Implement real-time progress tracking UI
 - [x] Added `start_backend.bat` script for Windows users to auto-activate venv and start the backend server with one command.
 - [x] Added `start_frontend.bat` script for Windows users to easily start the Next.js frontend development server.
 - [x] Added `start_servers.bat` script to start both backend and frontend servers with one command.
-- [x] Upgraded frontend to Next.js 14.2.x (latest as of May 2025)
-- [x] Added `start_servers.bat` script to launch both backend and frontend servers at once
+- [x] Upgraded frontend to Next.js 14.2.x and 15.x (latest as of May 2025)
 - [x] Fixed hydration error: moved Material-UI theming to a client component (`theme-provider.tsx`) and made `layout.tsx` a server component
 - [x] Added `git_push.bat` script for automated git add, commit, and push to origin main
 
-## 📝 Next Steps
+## 🧪 Testing & Documentation
 
-1. **Backend Development**
-   - [ ] Integrate STAR processing code into FastAPI backend
-   - [ ] Implement proper file handling and cleanup
-   - [ ] Add proper error handling and validation
-   - [ ] Implement user authentication system
-   - [ ] Add processing queue management
-   - [ ] Add email notifications for completed jobs
+- [x] Added `run_test.ps1` for automated inference testing
+- [ ] Write unit tests for backend
+- [ ] Write unit tests for frontend
+- [ ] Write integration tests
+- [ ] Update API documentation
+- [ ] Write user documentation
+- [ ] Write developer documentation
 
-2. **Frontend Development**
-   - [ ] Add proper error handling and user feedback
-   - [ ] Implement processing history view
-   - [ ] Add model configuration options
-   - [ ] Add video format conversion options
-   - [ ] Add batch processing interface
-   - [ ] Add custom prompt input for models
-
-3. **Testing & Documentation**
-   - [ ] Write unit tests for backend
-   - [ ] Write unit tests for frontend
-   - [ ] Write integration tests
-   - [ ] Update API documentation
-   - [ ] Write user documentation
-   - [ ] Write developer documentation
-
-4. **Deployment**
-   - [ ] Set up development environment
-   - [ ] Set up staging environment
-   - [ ] Set up production environment
-   - [ ] Set up CI/CD pipeline
-   - [ ] Set up monitoring and logging
-   - [ ] Set up backup and recovery
+## 🚀 Deployment
+- [ ] Set up development environment
+- [ ] Set up staging environment
+- [ ] Set up production environment
+- [ ] Set up CI/CD pipeline
+- [ ] Set up monitoring and logging
+- [ ] Set up backup and recovery
 
 ---
 *Last Updated: 2025-05-12* 

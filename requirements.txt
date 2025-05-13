@@ -1,4 +1,7 @@
 accelerate
+torch==2.0.1
+torchvision==0.15.2
+torchaudio==2.0.2
 opencv-python==4.10.0.84
 easydict==1.13
 einops==0.8.0
