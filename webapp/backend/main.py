@@ -113,8 +113,8 @@ async def upload_video(file: UploadFile = File(...)):
 async def run_inference_process(filename: str, model: str):
     """Runs the inference script as a subprocess and updates job status."""
     job_id = filename
-    python_executable = "../venv/Scripts/python.exe" # Adjust if necessary
-    script_path = "../video_super_resolution/scripts/inference_sr.py"
+    python_executable = "../../venv/Scripts/python.exe" # Adjust if necessary
+    script_path = "../../video_super_resolution/scripts/inference_sr.py"
     input_path = os.path.abspath(os.path.join(UPLOAD_DIR, filename))
     output_dir = os.path.abspath(RESULTS_DIR)
     output_filename = filename # Use the same unique name for output
@@ -157,7 +157,7 @@ async def run_inference_process(filename: str, model: str):
         *command,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
-        cwd=".." # Run from the parent directory (STAR/)
+        # cwd=".." # Removed: Run from the default backend directory
     )
 
     # Process stdout stream for progress updates
